@@ -3,10 +3,15 @@ import { LoginDto, RegisterDto } from './dto';
 import { RpcException } from '@nestjs/microservices';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService extends PrismaClient implements OnModuleInit {
   private logger = new Logger('auth.service.ts');
+
+  constructor(private readonly jwtService: JwtService) {
+    super();
+  }
 
   onModuleInit() {
     this.$connect();
@@ -37,9 +42,10 @@ export class AuthService extends PrismaClient implements OnModuleInit {
     });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: __, ...data } = newUser;
+    const token = this.jwtService.sign({ id: data.id });
     return {
       user: data,
-      token: 'sdfghgfdsasdfgh',
+      token: token,
     };
   }
   async loginUser(loginDto: LoginDto) {
@@ -64,9 +70,10 @@ export class AuthService extends PrismaClient implements OnModuleInit {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: __, ...data } = user;
+    const token = this.jwtService.sign({ id: data.id });
     return {
       user: data,
-      token: 'fghjkllkjhgfghjk',
+      token: token,
     };
   }
   verifyToken(tokenDto: string) {
