@@ -1,9 +1,11 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller()
 export class AuthController {
+  private logger = new Logger('auth-auth.controller.ts');
+
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern('auth.register.user')
