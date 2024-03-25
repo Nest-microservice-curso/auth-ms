@@ -22,8 +22,7 @@ export class AuthController {
   }
 
   @MessagePattern('auth.verify.user')
-  verifyToken(@Payload() tokenDto: any) {
-    const token = this.authService.verifyToken(tokenDto);
-    return token;
+  verifyToken(@Payload() token: string) {
+    return this.authService.verifyToken(token);
   }
 }
